@@ -77,18 +77,14 @@ async function templates(source, dest) {
         }
       }
     }
-
-    templatesName.map(async (templatesName) => {
-      fss.readFile(source + templatesName, 'utf8', (err, data) => {
-        let name = `{{${path.basename(
-          templatesName,
-          path.extname(templatesName)
-        )}}}`;
+    for (let test of templatesName) {
+      fss.readFile(source + test, 'utf8', (err, data) => {
+        fs.writeFile(dest, result, () => {});
+        let name = `{{${path.basename(test, path.extname(test))}}}`;
         template = data.toString();
         result = result.replace(name, template);
-        console.log(name);
         fs.writeFile(dest, result, () => {});
       });
-    });
+    }
   });
 }
