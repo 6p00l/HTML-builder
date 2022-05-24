@@ -16,7 +16,7 @@ fs.readdir(folderPath, { withFileTypes: true }, (err, files) => {
           'utf8'
         );
         readableStream.on('data', (data) => {
-          fs.appendFile(bundlePath, data, () => {});
+          fs.appendFile(bundlePath, data + '\n', () => {});
         });
       }
     }
