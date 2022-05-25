@@ -1,19 +1,20 @@
 const fs = require('fs');
 const { stdin, stdout } = process;
+const path = require('path');
+const dest = path.join(__dirname, 'test.txt');
 
-fs.writeFile('./02-write-file/test.txt', '', function (err) {
+fs.writeFile(dest, '', function (err) {
   if (err) throw err;
 });
 
 stdout.write('Введите текст \n');
 stdin.on('data', (data) => {
   const text = data.toString().trim();
-  console.log(text);
   if (text == 'exit') {
     stdout.write('Досвидания _/');
     process.exit();
   }
-  fs.appendFile('./02-write-file/test.txt', data, () => {});
+  fs.appendFile(dest, data, () => {});
 });
 
 process.on('SIGINT', () => {

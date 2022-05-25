@@ -1,8 +1,9 @@
-const folderPath = './04-copy-directory/files';
-const destFolderPath = './04-copy-directory/files-copy';
-
-const { promises: fs } = require('fs');
 const path = require('path');
+const destFolderPath = path.join(__dirname, 'files-copy');
+const folderPath = path.join(__dirname, 'files');
+const { promises: fs } = require('fs');
+
+copyDir(folderPath, destFolderPath);
 
 async function copyDir(source, dest) {
   await fs.rm(destFolderPath, { force: true, recursive: true }, () => {});
@@ -18,5 +19,3 @@ async function copyDir(source, dest) {
     } else await copyDir(filePath, destFilePath);
   }
 }
-
-copyDir(folderPath, destFolderPath);

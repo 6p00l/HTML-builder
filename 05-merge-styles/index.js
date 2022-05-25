@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const folderPath = './05-merge-styles/styles/';
-const bundlePath = './05-merge-styles/project-dist/bundle.css';
+
+const folderPath = path.join(__dirname, 'styles');
+const bundlePath = path.join(__dirname, 'project-dist', 'bundle.css');
 
 fs.rm(bundlePath, { force: true, recursive: true }, () => {});
 
@@ -12,7 +13,7 @@ fs.readdir(folderPath, { withFileTypes: true }, (err, files) => {
       let ext = path.extname(file.name);
       if (ext === '.css') {
         const readableStream = fs.createReadStream(
-          folderPath + file.name,
+          path.join(folderPath, file.name),
           'utf8'
         );
         readableStream.on('data', (data) => {

@@ -1,17 +1,17 @@
 const path = require('path');
-const stylesFolderPath = './06-build-page/styles/';
-const bundlePath = './06-build-page/project-dist/style.css';
-const assetsFolderPath = './06-build-page/assets';
-const assetsDestFolderPath = './06-build-page/project-dist/assets';
-const componentsSource = './06-build-page/components/';
-const htmlDest = './06-build-page/project-dist/index.html';
-const templateSource = './06-build-page/template.html';
 const { promises: fs } = require('fs');
 const fss = require('fs');
+const stylesFolderPath = path.join(__dirname, 'styles');
+const bundlePath = path.join(__dirname, 'project-dist', 'style.css');
+const assetsFolderPath = path.join(__dirname, 'assets');
+const assetsDestFolderPath = path.join(__dirname, 'project-dist', 'assets');
+const componentsSource = path.join(__dirname, 'components');
+const htmlDest = path.join(__dirname, 'project-dist', 'index.html');
+const templateSource = path.join(__dirname, 'template.html');
 
 (async function () {
   await fs.rm(
-    './06-build-page/project-dist/',
+    path.join(__dirname, 'project-dist'),
     { force: true, recursive: true },
     () => {}
   );
@@ -43,7 +43,7 @@ function copyCss() {
         let ext = path.extname(file.name);
         if (ext === '.css') {
           const readableStream = fss.createReadStream(
-            stylesFolderPath + file.name,
+            path.join(stylesFolderPath, file.name),
             'utf8'
           );
           readableStream.on('data', (data) => {
@@ -78,11 +78,12 @@ async function templates(source, dest) {
       }
     }
     for (let test of templatesName) {
-      fss.readFile(source + test, 'utf8', (err, data) => {
+      fss.readFile(path.join(source, test), 'utf8', (err, data) => {
         fs.writeFile(dest, result, () => {});
         let name = `{{${path.basename(test, path.extname(test))}}}`;
         template = data.toString();
         result = result.replace(name, template);
+        console.log(name);
         fs.writeFile(dest, result, () => {});
       });
     }

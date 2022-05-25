@@ -1,4 +1,6 @@
 const fs = require('fs');
+const path = require('path');
+const src = path.join(__dirname, 'text.txt');
 
-const readableStream = fs.createReadStream('./01-read-file/text.txt', 'utf8');
+const readableStream = fs.createReadStream(src, 'utf8');
 readableStream.on('data', (data) => console.log(data));
