@@ -56,36 +56,15 @@ function copyCss() {
 }
 
 async function templates(source, dest) {
-  let result;
-  let template, name;
-  let templates = [];
-  let templatesName = [];
+  let result = await fs.readFile(templateSource, 'utf8');
 
-  fss.readFile(templateSource, 'utf8', (err, data) => {
-    result = data.toString();
-  });
+  let templatesName = await fs.readdir(source, { withFileTypes: true });
 
-  fss.readdir(source, { withFileTypes: true }, (err, files) => {
-    if (err) return;
-
-    for (let file of files) {
-      if (file.isFile() === true) {
-        if (path.extname(file.name) === '.html') {
-          name = `{{${path.basename(file.name, path.extname(file.name))}}}`;
-          templates.push(name);
-          templatesName.push(file.name);
-        }
-      }
-    }
-    for (let test of templatesName) {
-      fss.readFile(path.join(source, test), 'utf8', (err, data) => {
-        fs.writeFile(dest, result, () => {});
-        let name = `{{${path.basename(test, path.extname(test))}}}`;
-        template = data.toString();
-        result = result.replace(name, template);
-        console.log(name);
-        fs.writeFile(dest, result, () => {});
-      });
-    }
-  });
+  for (let file of templatesName) {
+    file = file.name;
+    let name = `{{${path.basename(file, path.extname(file))}}}`;
+    let templateFile = await fs.readFile(path.join(source, file), 'utf8');
+    result = result.replace(name, templateFile);
+  }
+  fs.writeFile(dest, result);
 }
